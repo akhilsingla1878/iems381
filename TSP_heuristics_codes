@@ -1,0 +1,36 @@
+# Nearest Neighbour Algorithm
+# Source: https://stackoverflow.com/questions/17493494/nearest-neighbour-algorithm
+
+def NN(A, start):
+    """Nearest neighbor algorithm.
+    A is an NxN array indicating distance between N locations
+    start is the index of the starting location
+    Returns the path and cost of the found solution
+    """
+    path = [start]
+    cost = 0
+    N = A.shape[0]
+    mask = np.ones(N, dtype=bool)  # boolean values indicating which 
+                                   # locations have not been visited
+    mask[start] = False
+
+    for i in range(N-1):
+        last = path[-1]
+        next_ind = np.argmin(A[last][mask]) # find minimum of remaining locations
+        next_loc = np.arange(N)[mask][next_ind] # convert to original location
+        path.append(next_loc)
+        mask[next_loc] = False
+        cost += A[last, next_loc]
+
+    return path, cost
+    
+    # Example of this function in use:
+    
+    # Expected order is 0,2,3,1,4
+A = np.array([
+    [0, 2, 1, 2, 2],
+    [2, 0, 2, 1, 1],
+    [1, 2, 0, 1, 2],
+    [2, 1, 1, 0, 2],
+    [2, 1, 2, 2, 0]])
+print NN(A,0)
